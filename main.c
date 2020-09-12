@@ -22,7 +22,7 @@ int cmp_stacks(stack a, stack b);
 //Niagara o roar again
 
 int main() {
-    system("chcp 65001");
+    system("chcp 65001"); //"Русификация" консоли
 
     puts("Insert text:");
     char input[STACK_SIZE];
