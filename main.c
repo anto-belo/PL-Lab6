@@ -22,7 +22,7 @@ int cmp_stacks(stack a, stack b);
 //Niagara o roar again
 
 int main() {
-    system("chcp 65001"); //"Русификация" консоли
+    //system("chcp 65001"); //"Русификация" консоли
 
     puts("Insert text:");
     char input[STACK_SIZE];
@@ -42,7 +42,7 @@ int main() {
 
     frst_half.top = scnd_half.top = text_size / 2;
 
-    if(cmp_stacks(frst_half, scnd_half)) {
+    if (cmp_stacks(frst_half, scnd_half)) {
         puts("SYMMETRICAL");
     } else puts("NON-SYMMETRICAL");
 
@@ -50,7 +50,6 @@ int main() {
 }
 
 void format_text(char *text) {
-    if (text[strlen(text) - 1] == '.') text[strlen(text) - 1] = '\0';
     for (int i = 0; i < strlen(text); i++) {
         char s = text[i];
         if (s == ' ' || s == '.' || s == ',' || s == ';' || s == '-' || s == ':') {
@@ -58,7 +57,7 @@ void format_text(char *text) {
                 text[j] = text[j + 1];
             i--;
         } else if ('A' <= s && s <= 'Z')
-            text[i] = (char)((int)text[i] + 32);
+            text[i] += 32;
     }
 }
 
@@ -70,14 +69,15 @@ void push(char *s, int top, char letter) {
 
 void push_text(char *s, int top, char input[], int border_a, int border_b, int order) {
     if (order)
-         for (int i = border_a; i < border_b; i++) {
+        for (int i = border_a; i < border_b; i++) {
             push(s, top, input[i]);
             top++;
-         }
-    else for (int i = border_a; i > border_b; i--) {
+        }
+    else
+        for (int i = border_a; i > border_b; i--) {
             push(s, top, input[i]);
             top++;
-    }
+        }
 }
 
 int cmp_stacks(stack a, stack b) {
