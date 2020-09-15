@@ -1,20 +1,22 @@
 #include <stdio.h>
 #include <windows.h>
 
-#define STACK_SIZE 1000
+#define MAX_SIZE 500
 
-typedef struct {
-    char text[STACK_SIZE];
-    int top;
-} stack;
+struct stack{
+    char val;
+    struct stack *next;
+};
+
+struct stack* init_stack();
 
 void format_text(char *text);
 
-void push(char *s, int top, char letter);
+void push(struct stack *s, char l);
 
-void push_text(char *s, int top, char input[], int border_a, int border_b, int order);
+void push_text(struct stack *s, char input[], int border_a, int border_b, int order);
 
-int cmp_stacks(stack a, stack b);
+int cmp_stacks(struct stack a, struct stack b);
 
 //A roza upala na lapu Azora
 //Argentina manit negra
@@ -25,28 +27,34 @@ int main() {
     //system("chcp 65001"); //"Русификация" консоли
 
     puts("Insert text:");
-    char input[STACK_SIZE];
+    char input[MAX_SIZE];
     gets(input);
     format_text(input);
     int text_size = (int) strlen(input);
 
-    stack frst_half = {{}, 0};
-    stack scnd_half = {{}, 0};
+    struct stack *frst_half = init_stack();
+    struct stack *scnd_half = init_stack();
 
     int border = text_size / 2;
-    push_text(frst_half.text, frst_half.top, input, 0, border, 1);
+    push_text(frst_half, input, 0, border, 1);
 
     int is_even = (text_size % 2 == 0) ? 1 : 0;
     border = (is_even) ? (text_size / 2 - 1) : (text_size / 2);
-    push_text(scnd_half.text, scnd_half.top, input, text_size - 1, border, 0);
+    push_text(scnd_half, input, text_size - 1, border, 0);
 
-    frst_half.top = scnd_half.top = text_size / 2;
-
-    if (cmp_stacks(frst_half, scnd_half)) {
+    if (cmp_stacks(*frst_half, *scnd_half)) {
         puts("SYMMETRICAL");
     } else puts("NON-SYMMETRICAL");
 
     return 0;
+}
+
+struct stack* init_stack() {
+    struct stack *s;
+    s = malloc(sizeof(struct stack));
+    s->val = '\0';
+    s->next = NULL;
+    return s;
 }
 
 void format_text(char *text) {
@@ -61,28 +69,28 @@ void format_text(char *text) {
     }
 }
 
-void push(char *s, int top, char letter) {
-    if (top != STACK_SIZE) {
-        s[top] = letter;
-    } else puts("Stack is full!");
+void push(struct stack *s, char l) {
+    struct stack *temp = malloc(sizeof(struct stack));
+    while (s->next != NULL) s = s->next;
+    temp->val = l;
+    temp->next = NULL;
+    s->next = temp;
 }
 
-void push_text(char *s, int top, char input[], int border_a, int border_b, int order) {
+void push_text(struct stack *s, char input[], int border_a, int border_b, int order) {
     if (order)
-        for (int i = border_a; i < border_b; i++) {
-            push(s, top, input[i]);
-            top++;
-        }
-    else
-        for (int i = border_a; i > border_b; i--) {
-            push(s, top, input[i]);
-            top++;
-        }
+        for (int i = border_a; i < border_b; i++)
+            push(s, input[i]);
+    else for (int i = border_a; i > border_b; i--)
+            push(s, input[i]);
 }
 
-int cmp_stacks(stack a, stack b) {
-    for (int i = 0; i < a.top; i++)
-        if (a.text[i] != b.text[i])
-            return 0;
+int cmp_stacks(struct stack a, struct stack b) {
+    struct stack *x = a.next, *y = b.next;
+    while (x->next != NULL && y->next != NULL) {
+        if (x->val != y->val) return 0;
+        x = x->next;
+        y = y->next;
+    }
     return 1;
 }
