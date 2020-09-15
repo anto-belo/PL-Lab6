@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <windows.h>
 
-#define MAX_SIZE 500
-
 struct stack{
     char val;
     struct stack *next;
@@ -27,7 +25,7 @@ int main() {
     //system("chcp 65001"); //"Русификация" консоли
 
     puts("Insert text:");
-    char input[MAX_SIZE];
+    char input[200];
     gets(input);
     format_text(input);
     int text_size = (int) strlen(input);
@@ -50,8 +48,7 @@ int main() {
 }
 
 struct stack* init_stack() {
-    struct stack *s;
-    s = malloc(sizeof(struct stack));
+    struct stack *s = (struct stack*)malloc(sizeof(struct stack));
     s->val = '\0';
     s->next = NULL;
     return s;
@@ -70,7 +67,7 @@ void format_text(char *text) {
 }
 
 void push(struct stack *s, char l) {
-    struct stack *temp = malloc(sizeof(struct stack));
+    struct stack *temp = (struct stack*)malloc(sizeof(struct stack));
     while (s->next != NULL) s = s->next;
     temp->val = l;
     temp->next = NULL;
