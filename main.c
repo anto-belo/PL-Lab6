@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <windows.h>
 
-struct stack{
+struct stack {
     char val;
     struct stack *next;
 };
 
-struct stack* init_stack();
+struct stack *init_stack();
 
 void format_text(char *text);
 
@@ -47,8 +47,8 @@ int main() {
     return 0;
 }
 
-struct stack* init_stack() {
-    struct stack *s = (struct stack*)malloc(sizeof(struct stack));
+struct stack *init_stack() {
+    struct stack *s = (struct stack *) malloc(sizeof(struct stack));
     s->val = '\0';
     s->next = NULL;
     return s;
@@ -67,7 +67,7 @@ void format_text(char *text) {
 }
 
 void push(struct stack *s, char l) {
-    struct stack *temp = (struct stack*)malloc(sizeof(struct stack));
+    struct stack *temp = (struct stack *) malloc(sizeof(struct stack));
     while (s->next != NULL) s = s->next;
     temp->val = l;
     temp->next = NULL;
@@ -78,14 +78,16 @@ void push_text(struct stack *s, char input[], int border_a, int border_b, int or
     if (order)
         for (int i = border_a; i < border_b; i++)
             push(s, input[i]);
-    else for (int i = border_a; i > border_b; i--)
+    else
+        for (int i = border_a; i > border_b; i--)
             push(s, input[i]);
 }
 
 int cmp_stacks(struct stack a, struct stack b) {
     struct stack *x = a.next, *y = b.next;
     while (x->next != NULL && y->next != NULL) {
-        if (x->val != y->val) return 0;
+        if (x->val != y->val)
+            return 0;
         x = x->next;
         y = y->next;
     }
